@@ -8,4 +8,4 @@ class Ball(Point):
         self.color = color
 
     def draw(self,img):
-        cv.circle(img,self.pos,self.radius,self.color)
+        pg.draw.circle(img, self.color, (self.pos[0], self.pos[1]), self.radius)

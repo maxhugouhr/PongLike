@@ -9,11 +9,4 @@ class Battlefield:
         self.surfaces = []
         self.ball = Ball()
 
-    def addBorder(self,offset=10):
-        corners = [(offset,offset),
-                   (self.length-offset,offset),
-                   (self.length-offset, self.width-offset),
-                   (offset, self.width-offset)]
-
-        for i in range(4):
-            center = (corners[i-1] + corners[i])/2
+    

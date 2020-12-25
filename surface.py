@@ -2,6 +2,7 @@ from point import Point
 from reflector import Reflector
 import numpy as np
 import math
+import pygame as pg
 
 def unitVec(facing):
     return np.array((math.cos(facing), math.sin(facing)))
@@ -15,14 +16,14 @@ class Surface(Point, Reflector):
         self.width = width
 
     def ends(self):
-        forward = unitVec(self.facing)
-        beside = unitVec(self.facing + math.pi/2)
+        forward = unitVec(self.rotation)
+        beside = unitVec(self.rotation + math.pi/2)
         return self.pos + self.length*beside/2, self.pos - self.length*beside/2
 
     def draw(self, img):
         ends = self.ends()
-        cv.line(img, ends[0], ends[1], self.width, self.color)
+        pg.draw.line(img, self.color, ends[0], ends[1], self.width)
 
-    def setFacing(self,point1,point2):
+    def setRotation(self,point1,point2):
         unit = np.linalg.norm(point2 - point1)
         return np.angle(unit) + math.pi/2
