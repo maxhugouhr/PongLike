@@ -1,6 +1,6 @@
 import cv2 as cv
 import numpy as np
 
-sw = 500
-sh = 750
-background = np.zeros((sw, sh, 3), np.uint8)
+SCREEN_WIDTH = 500
+SCREEN_HEIGHT = 750
+background = np.zeros((SCREEN_WIDTH, SCREEN_HEIGHT, 3), np.uint8)
