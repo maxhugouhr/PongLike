@@ -27,3 +27,6 @@ class Surface(Point, Reflector):
     def setRotation(self,point1,point2):
         unit = np.linalg.norm(point2 - point1)
         return np.angle(unit) + math.pi/2
+
+    def reflect(self,ball):
+
