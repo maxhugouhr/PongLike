@@ -1,4 +1,3 @@
-from point import Point
 from reflector import Reflector
 import numpy as np
 import math
@@ -7,13 +6,22 @@ import pygame as pg
 def unitVec(facing):
     return np.array((math.cos(facing), math.sin(facing)))
 
-class Surface(Point, Reflector):
+class Surface(Reflector):
 
-    def __init__(self, speed=np.array((0.0,0.0)), position=np.array((0.0,0.0)),facing=0, color=(255,255,255), length=0, width=0):
-        super(speed, position, facing)
+    def __init__(self, speed=np.array((0.0,0.0)), leftEnd=0, rightEnd=0 , color=(255,255,255), width=0):
+        self.leftEndpoint = leftEnd
+        self.rightEndpoint = rightEnd
         self.color = color
-        self.length = length
+        dy = float(rightEnd[1] - leftEnd[1])
+        dx = float(rightEnd[0] - leftEnd[0])
+        self.length = math.sqrt(dx**2 + dy**2)
         self.width = width
+        self.speed = speed
+        if dy < 0:
+            self.normalVec = np.array((-dy,dx))
+        else:
+            self.normalVec = np.array(dy,-dx)
+
 
     def ends(self):
         forward = unitVec(self.rotation)
@@ -29,4 +37,6 @@ class Surface(Point, Reflector):
         return np.angle(unit) + math.pi/2
 
     def reflect(self,ball):
+        #TODO
+        raise NotImplementedError()
 

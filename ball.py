@@ -1,11 +1,11 @@
-from point import Point
-import cv2 as cv
 
-class Ball(Point):
-    def __init__(self, speed=np.array((0.0,0.0)), position=np.array((0.0,0.0)),facing=0, radius=1, color=(255,255,255)):
-        super(speed, position, facing)
+
+class Ball():
+    def __init__(self,position=np.array((0.0,0.0)), speed=np.array((0.0,0.0)), radius=1, color=(255,255,255)):
         self.radius = radius
         self.color = color
+        self.speed = speed
+        self.pos = position
 
     def draw(self,img):
         pg.draw.circle(img, self.color, (self.pos[0], self.pos[1]), self.radius)
