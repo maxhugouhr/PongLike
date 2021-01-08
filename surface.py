@@ -3,12 +3,9 @@ import numpy as np
 import math
 import pygame as pg
 
-def unitVec(facing):
-    return np.array((math.cos(facing), math.sin(facing)))
-
 class Surface(Reflector):
 
-    def __init__(self, speed=np.array((0.0,0.0)), leftEnd=0, rightEnd=0 , color=(255,255,255), width=0):
+    def __init__(self, speed=(0,0), leftEnd=0, rightEnd=0 , color=(255,255,255), width=0,reflector=True,speedMultiplier=1):
         self.leftEndpoint = leftEnd
         self.rightEndpoint = rightEnd
         self.color = color
@@ -17,26 +14,37 @@ class Surface(Reflector):
         self.length = math.sqrt(dx**2 + dy**2)
         self.width = width
         self.speed = speed
-        if dy < 0:
-            self.normalVec = np.array((-dy,dx))
-        else:
-            self.normalVec = np.array(dy,-dx)
+        self.angle = float(math.atan(dy/dx)) #angle with respect to the horizontal x axis, between 0 and 2pi
+        self.isReflector = reflector #if surface is a reflector then it reflects the ball, otherwise it deflects the ball
+        self.speedMultiplier = speedMultiplier #multiplies the ball speed when hit
 
-
-    def ends(self):
-        forward = unitVec(self.rotation)
-        beside = unitVec(self.rotation + math.pi/2)
-        return self.pos + self.length*beside/2, self.pos - self.length*beside/2
 
     def draw(self, img):
-        ends = self.ends()
-        pg.draw.line(img, self.color, ends[0], ends[1], self.width)
+        pg.draw.line(img, self.color, self.leftEndpoint, self.rightEndpoint, self.width)
 
-    def setRotation(self,point1,point2):
-        unit = np.linalg.norm(point2 - point1)
-        return np.angle(unit) + math.pi/2
 
     def reflect(self,ball):
-        #TODO
-        raise NotImplementedError()
+        ballAngle = float(math.atan(ball.velocity[1]/ball.velocity[0])) #angle with respect to the x axis
+        reflectionAngle = self.angle - ballAngle #finds angle between the ball's velocity and the surface
+        newAngle = math.pi - reflectionAngle #new angle that the velocity will be coming out at
+        ballVelocityMag = self.speedMultiplier*math.sqrt(ball.velocity[0]**2 + ball.velocity[1]**2)
+        ball.velocity[0] = ballVelocityMag*math.cos(newAngle) #updates the balls velocity after reflection
+        ball.velocity[1] = ballVelocityMag*math.sin(newAngle)
 
+    def deflect(self,ball):
+        # TODO implement this method
+        pass
+
+
+    def checkHit(self,ball):
+        if ball.position[0] < self.rightEndpoint[0] and ball.position[0] > self.leftEndpoint[0]:
+            dy = float(self.rightEndpoint[1] - self.leftEndpoint[1])
+            dx = float(self.rightEndpoint[0] - self.leftEndpoint[0])
+            slope = float(dy/dx)
+            surfaceYValue = slope*(ball.position[0] - self.leftEndpoint[0]) + self.rightEndpoint[0]
+            ballVelocityMag = math.sqrt(ball.velocity[0] ** 2 + ball.velocity[1] ** 2)
+            if math.abs(surfaceYValue - ball.position[1]) < 1.1*ballVelocityMag:
+                if self.isReflector:
+                    self.reflect(self,ball)
+                else:
+                    self.deflect(self,ball)
