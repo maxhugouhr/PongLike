@@ -13,11 +13,11 @@ class Battlefield:
         self.ball = Ball()
 
     def addEdges(self):
-        leftSurface = Surface(self,np.array((0.0,0.0)),np.array(SCREEN_HEIGHT/2, 0),math.pi/2,(0,0,0),SCREEN_HEIGHT,0)
-        rightSurface = Surface(self,np.array((0.0,0.0)),np.array(SCREEN_HEIGHT/2,SCREEN_WIDTH),math.pi/2,(0,0,0),SCREEN_HEIGHT,0)
-        topSurface = Surface(self,np.array((0.0,0.0)),np.array(SCREEN_WIDTH/2, 0),0,(0,0,0),SCREEN_WIDTH,0)
-        bottomSurface = Surface(self,np.array((0.0,0.0)),np.array(SCREEN_WIDTH/2, SCREEN_HEIGHT),0,(0,0,0),SCREEN_WIDTH,0)
+        leftSurface = Surface(self,(0,0),(0,0),(0,SCREEN_HEIGHT),(255,255,255),5,True,1)
+        rightSurface = Surface(self, (0, 0),(SCREEN_WIDTH,0), (SCREEN_WIDTH,SCREEN_HEIGHT), (255, 255, 255), 5, True, 1)
+        topSurface = Surface(self, (0, 0), (0,0),(SCREEN_WIDTH,0), (0, 0, 0), 5, True, 1)
+        bottomSurface = Surface(self, (0, 0), (0,SCREEN_HEIGHT),(SCREEN_WIDTH,SCREEN_HEIGHT), (0, 0, 0), 5, True, 1)
         self.surfaces.append(leftSurface)
         self.surfaces.append(rightSurface)
         self.surfaces.append(topSurface)
-        self.surface.append(bottomSurface)
+        self.surfaces.append(bottomSurface)

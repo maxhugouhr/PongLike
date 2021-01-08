@@ -1,22 +1,29 @@
 from reflector import Reflector
-import numpy as np
 import math
 import pygame as pg
 
 class Surface(Reflector):
-
-    def __init__(self, speed=(0,0), leftEnd=0, rightEnd=0 , color=(255,255,255), width=0,reflector=True,speedMultiplier=1):
+    #For vertical surfaces, the left endpoint is defined as the top point and the right endpoint is the bottom
+    def __init__(self, speed=(0,0), leftEnd=(0,0), rightEnd=(0,0) , color=(255,255,255), width=0,reflector=True,speedMultiplier=1,defAngle=0):
         self.leftEndpoint = leftEnd
         self.rightEndpoint = rightEnd
         self.color = color
         dy = float(rightEnd[1] - leftEnd[1])
         dx = float(rightEnd[0] - leftEnd[0])
+
+        if dx == 0:
+            self.angle = math.pi/2
+        elif dy == 0:
+            self.angle = 0
+        else:
+            self.angle = float(math.atan(dy / dx))  # angle with respect to the horizontal x axis, between 0 and 2pi
+
         self.length = math.sqrt(dx**2 + dy**2)
         self.width = width
         self.speed = speed
-        self.angle = float(math.atan(dy/dx)) #angle with respect to the horizontal x axis, between 0 and 2pi
         self.isReflector = reflector #if surface is a reflector then it reflects the ball, otherwise it deflects the ball
         self.speedMultiplier = speedMultiplier #multiplies the ball speed when hit
+        self.deflectionAngle = defAngle
 
 
     def draw(self, img):
@@ -37,13 +44,24 @@ class Surface(Reflector):
 
 
     def checkHit(self,ball):
-        if ball.position[0] < self.rightEndpoint[0] and ball.position[0] > self.leftEndpoint[0]:
+        ballVelocityMag = math.sqrt(ball.velocity[0] ** 2 + ball.velocity[1] ** 2)
+        if (self.leftEndpoint[0] == self.rightEndpoint[0]):
+            if abs(ball.position[0] - self.leftEndpoint[0]) < 1.1*ballVelocityMag and ball.position[1] < self.rightEndpoint[1] and ball.position[1] > self.leftEndpoint[1]:
+                if self.isReflector:
+                    self.reflect(self,ball)
+                else:
+                    self.deflect(self,ball)
+        elif abs(ball.position[0] - self.leftEndpoint[1]) < 1.1*ballVelocityMag and ball.position[0] < self.rightEndpoint[0] and ball.position[0] > self.leftEndpoint[0]:
+            if self.isReflector:
+                self.reflect(self, ball)
+            else:
+                self.deflect(self, ball)
+        elif ball.position[0] < self.rightEndpoint[0] and ball.position[0] > self.leftEndpoint[0]:
             dy = float(self.rightEndpoint[1] - self.leftEndpoint[1])
             dx = float(self.rightEndpoint[0] - self.leftEndpoint[0])
             slope = float(dy/dx)
             surfaceYValue = slope*(ball.position[0] - self.leftEndpoint[0]) + self.rightEndpoint[0]
-            ballVelocityMag = math.sqrt(ball.velocity[0] ** 2 + ball.velocity[1] ** 2)
-            if math.abs(surfaceYValue - ball.position[1]) < 1.1*ballVelocityMag:
+            if abs(surfaceYValue - ball.position[1]) < 1.1*ballVelocityMag:
                 if self.isReflector:
                     self.reflect(self,ball)
                 else:
