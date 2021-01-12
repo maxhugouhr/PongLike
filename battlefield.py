@@ -1,22 +1,20 @@
-from coreCode import SCREEN_HEIGHT, SCREEN_WIDTH
 from surface import Surface
 from ball import Ball
-import math
-import numpy as np
 
-class Battlefield:
 
-    def __init__(self, length=0, width=0):
-        self.length = length
+class Battlefield():
+
+    def __init__(self, width=0, height=0):
         self.width = width
+        self.height = height
         self.surfaces = []
-        self.ball = Ball()
+        self.ball = Ball([int(self.width/2),int(self.height/2)], [2,2], 5, (255,255,255))
 
     def addEdges(self):
-        leftSurface = Surface(self,(0,0),(0,0),(0,SCREEN_HEIGHT),(255,255,255),5,True,1)
-        rightSurface = Surface(self, (0, 0),(SCREEN_WIDTH,0), (SCREEN_WIDTH,SCREEN_HEIGHT), (255, 255, 255), 5, True, 1)
-        topSurface = Surface(self, (0, 0), (0,0),(SCREEN_WIDTH,0), (0, 0, 0), 5, True, 1)
-        bottomSurface = Surface(self, (0, 0), (0,SCREEN_HEIGHT),(SCREEN_WIDTH,SCREEN_HEIGHT), (0, 0, 0), 5, True, 1)
+        leftSurface = Surface((0,0),(0,0),(0, self.height),(255,255,255),5,True,1,0)
+        rightSurface = Surface((0, 0),(self.width,0), (self.width,self.height), (255, 255, 255), 5, True, 1,0)
+        topSurface = Surface((0, 0), (0,0),(self.width,0), (255, 255, 255), 5, True, 1,0)
+        bottomSurface = Surface((0, 0), (0,self.height),(self.width,self.height), (255, 255, 255), 5, True, 1,0)
         self.surfaces.append(leftSurface)
         self.surfaces.append(rightSurface)
         self.surfaces.append(topSurface)

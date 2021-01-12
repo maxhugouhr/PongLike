@@ -1,11 +1,11 @@
 import pygame as pg
-import numpy as np
+
 
 class Ball():
-    def __init__(self,position=(0,0), speed=(0,0), radius=1, color=(255,255,255)):
+    def __init__(self,position, speed, radius=1, color=(255,255,255)):
         self.radius = radius
         self.color = color
-        self.velocity = speed
+        self.velocity = speed #pixels per frame
         self.position = position
 
     def draw(self,img):
