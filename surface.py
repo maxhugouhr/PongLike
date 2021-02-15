@@ -11,14 +11,14 @@ class Surface(Reflector):
         dy = float(rightEnd[1] - leftEnd[1])
         dx = float(rightEnd[0] - leftEnd[0])
 
-        if dx == 0:
-            self.angle = math.pi/2
-        elif dy == 0:
-            self.angle = math.pi
+        normRightEnd = (rightEnd[0] - leftEnd[0], rightEnd[1] - leftEnd[1])
+        unitAngle = math.atan2(normRightEnd[1],normRightEnd[0])
+        if unitAngle < math.pi/2:
+            self.angleToHor = unitAngle
         else:
-            self.angle = float(math.atan(dy / dx))  # angle with respect to the horizontal x axis, between 0 and 2pi
+            self.angleToHor = -(2*math.pi - unitAngle)
 
-        self.length = math.sqrt(dx**2 + dy**2)
+        self.length = math.sqrt(normRightEnd[0]**2 + normRightEnd[1]**2)
         self.width = width
         self.speed = speed
         self.isReflector = reflector #if surface is a reflector then it reflects the ball, otherwise it deflects the ball
@@ -31,12 +31,14 @@ class Surface(Reflector):
 
 
     def reflect(self,ball):
-        ballAngle = float(math.atan(ball.velocity[1]/ball.velocity[0])) #angle with respect to the x axis
-        reflectionAngle = self.angle - ballAngle #finds angle between the ball's velocity and the surface
-        newAngle = math.pi - reflectionAngle #new angle that the velocity will be coming out at
-        ballVelocityMag = self.speedMultiplier*math.sqrt(ball.velocity[0]**2 + ball.velocity[1]**2)
-        ball.velocity[0] = ballVelocityMag*math.cos(newAngle) #updates the balls velocity after reflection
-        ball.velocity[1] = ballVelocityMag*math.sin(newAngle)
+        ballAngle = float(math.atan2(ball.velocity[1],ball.velocity[0])) #angle with respect to the x axis
+        flatBallAngle = ballAngle - self.angleToHor
+        ballMagVeloc = math.sqrt(ball.velocity[1]**2 + ball.velocity[0]**2)
+        refTransBallVeloc = (math.cos(flatBallAngle), -math.sin(flatBallAngle))
+        transOutAngle = math.atan2(refTransBallVeloc[1],refTransBallVeloc[0])
+        actualOutAngle = transOutAngle + self.angleToHor
+        ball.velocity[0] = ballMagVeloc*math.cos(actualOutAngle)
+        ball.velocity[1] = ballMagVeloc*math.sin(actualOutAngle)
 
 
     def deflect(self,ball):
