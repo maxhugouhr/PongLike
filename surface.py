@@ -47,26 +47,16 @@ class Surface(Reflector):
 
 
     def checkHit(self,ball):
+        dy = self.rightEndpoint[1] - self.leftEndpoint[1]
+        dx = self.rightEndpoint[0] - self.leftEndpoint[0]
         ballVelocityMag = math.sqrt(ball.velocity[0] ** 2 + ball.velocity[1] ** 2)
-        if (self.leftEndpoint[0] == self.rightEndpoint[0]):
-            if abs(ball.position[0] - self.leftEndpoint[0]) < ballVelocityMag and ball.position[1] < self.rightEndpoint[1] and ball.position[1] > self.leftEndpoint[1]:
-                if self.isReflector:
+        if (self.leftEndpoint[0] == self.rightEndpoint[0]): #if the surface is vertical
+            if (ball.position[1] < self.rightEndpoint[1] and ball.position[1] > self.leftEndpoint[1]):
+                if abs(self.leftEndpoint[0] - ball.position[0]) < ballVelocityMag:
                     self.reflect(ball)
-                else:
-                    self.deflect(ball)
-        elif self.leftEndpoint[1] == self.rightEndpoint[1]:
-            if abs(ball.position[0] - self.leftEndpoint[1]) <  ballVelocityMag and ball.position[0] < self.rightEndpoint[0] and ball.position[0] > self.leftEndpoint[0]:
-                if self.isReflector:
+        elif (self.leftEndpoint[1] == self.rightEndpoint[1]): #if the surface is horizontal
+            if (ball.position[0] < self.rightEndpoint[0] and ball.position[0] > self.leftEndpoint[0]):
+                if abs(ball.position[1] - self.leftEndpoint[1]) < ballVelocityMag:
                     self.reflect(ball)
-                else:
-                    self.deflect(ball)
-        elif ball.position[0] < self.rightEndpoint[0] and ball.position[0] > self.leftEndpoint[0]:
-            dy = float(self.rightEndpoint[1] - self.leftEndpoint[1])
-            dx = float(self.rightEndpoint[0] - self.leftEndpoint[0])
-            slope = float(dy/dx)
-            surfaceYValue = slope*(ball.position[0] - self.leftEndpoint[0]) + self.rightEndpoint[0]
-            if abs(surfaceYValue - ball.position[1]) < ballVelocityMag:
-                if self.isReflector:
-                    self.reflect(ball)
-                else:
-                    self.deflect(ball)
+        else:
+            y = lambda a: (dy/dx)*(a - self.leftEndpoint[0]) + self.leftEndpoint[1]
