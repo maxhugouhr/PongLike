@@ -31,6 +31,8 @@ class Surface(Reflector):
 
 
     def reflect(self,ball):
+        #transforms all surfaces to a horizontal surface, reflects by reversing y-velocity,
+        # then find the out angle and transforms back to normal coordinates
         ballAngle = float(math.atan2(ball.velocity[1],ball.velocity[0])) #angle with respect to the x axis
         flatBallAngle = ballAngle - self.angleToHor
         ballMagVeloc = math.sqrt(ball.velocity[1]**2 + ball.velocity[0]**2)
@@ -47,8 +49,6 @@ class Surface(Reflector):
 
 
     def checkHit(self,ball):
-        dy = self.rightEndpoint[1] - self.leftEndpoint[1]
-        dx = self.rightEndpoint[0] - self.leftEndpoint[0]
         ballVelocityMag = math.sqrt(ball.velocity[0] ** 2 + ball.velocity[1] ** 2)
         if (self.leftEndpoint[0] == self.rightEndpoint[0]): #if the surface is vertical
             if (ball.position[1] < self.rightEndpoint[1] and ball.position[1] > self.leftEndpoint[1]):
@@ -59,4 +59,6 @@ class Surface(Reflector):
                 if abs(ball.position[1] - self.leftEndpoint[1]) < ballVelocityMag:
                     self.reflect(ball)
         else:
-            y = lambda a: (dy/dx)*(a - self.leftEndpoint[0]) + self.leftEndpoint[1]
+            dy = self.rightEndpoint[1] - self.leftEndpoint[1]
+            dx = self.rightEndpoint[0] - self.leftEndpoint[0]
+            y = lambda a: (dy/dx)*(a - self.leftEndpoint[0]) + self.leftEndpoint[1] #gives the y value of the surface for a given x value
