@@ -13,6 +13,13 @@ crashed = False
 battlefield1 = Battlefield(SCREEN_WIDTH, SCREEN_HEIGHT)
 battlefield1.addEdges()
 
+pg.joystick.init()
+if pg.joystick.get_count() != 1:
+    print("joystick error, remove excess controllers or power cycle single controller")
+    exit()
+joystick = pg.joystick.Joystick(0)
+
+
 while not crashed:
     gameDisplay1.fill((0,0,0))
     for event in pg.event.get():
@@ -26,7 +33,11 @@ while not crashed:
     for surface in battlefield1.surfaces:
         surface.checkHit(battlefield1.ball)
     battlefield1.ball.updatePosition()
+    battlefield1.player.move(joystick.get_hat())
 
     pg.display.flip()
     clock.tick(30)
+
+
+pg.joystick.quit()
 
