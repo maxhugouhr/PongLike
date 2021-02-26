@@ -39,7 +39,7 @@ class Surface():
 
 
     def impact(self,ball):
-        if abs(self.lastHitTime - time.time_ns()) > 500000000/2: #ensures the ball can't bounce twice off the same surface in short time frames
+        if abs(self.lastHitTime - time.time_ns()) > 1e9/100: #ensures the ball can't bounce twice off the same surface in short time frames
             self.lastHitTime = time.time_ns()
             if self.isReflector:
                 self.reflect(ball)
@@ -70,18 +70,18 @@ class Surface():
 
 
     def checkHit(self,ball):
-        if (self.leftEndpoint[0] == self.rightEndpoint[0]): #if the surface is vertical
-            if (ball.position[1] < self.rightEndpoint[1] and ball.position[1] > self.leftEndpoint[1]):
-                if abs(self.leftEndpoint[0] - ball.position[0]) < 2:
+        if (abs(self.leftEndpoint[0]-self.rightEndpoint[0]) < Constant.TOLERANCE): #if the surface is vertical
+            if (ball.position[1] < self.rightEndpoint[1] + ball.radius and ball.position[1] > self.leftEndpoint[1] - ball.radius):
+                if abs(self.leftEndpoint[0] - ball.position[0]) < 1:
                     self.impact(ball)
-        elif (self.leftEndpoint[1] == self.rightEndpoint[1]): #if the surface is horizontal
-            if (ball.position[0] < self.rightEndpoint[0] and ball.position[0] > self.leftEndpoint[0]):
-                if abs(ball.position[1] - self.leftEndpoint[1]) < 2:
+        elif (abs(self.leftEndpoint[1]-self.rightEndpoint[1]) < Constant.TOLERANCE): #if the surface is horizontal
+            if (ball.position[0] < self.rightEndpoint[0] + ball.radius and ball.position[0] > self.leftEndpoint[0] - ball.radius):
+                if abs(ball.position[1] - self.leftEndpoint[1]) < 1:
                     self.impact(ball)
         else:
             dy = self.rightEndpoint[1] - self.leftEndpoint[1]
             dx = self.rightEndpoint[0] - self.leftEndpoint[0]
             y = lambda a: (dy/dx)*(a - self.leftEndpoint[0]) + self.leftEndpoint[1] #gives the y value of the surface for a given x value
             surfYValue = y(ball.position[0])
-            if abs(surfYValue - ball.position[1]) < 2:
+            if abs(surfYValue - ball.position[1]) < Constant.TOLERANCE:
                 self.impact(ball)

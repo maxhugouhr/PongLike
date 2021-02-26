@@ -1,7 +1,7 @@
 from surface import Surface
 from ball import Ball
 from player import Player
-from constants import Constant as C
+from constants import Constant
 
 
 class Battlefield():
@@ -10,13 +10,13 @@ class Battlefield():
         self.width = width
         self.height = height
         self.surfaces = []
-        self.ball = Ball([int(50),int(50)], [float(0),float(1)], float(self.height/(5e9)), 5, (255,255,255))
-        self.player = Player()
+        self.ball = Ball([int(50),int(50)], [float(0.5),float(0.5)], float(self.height/(2e9)), 4, (255,255,255))
+        self.player = Player([float(Constant.SCREEN_WIDTH/1e9),float(Constant.SCREEN_WIDTH/1e9)], [5,Constant.SCREEN_HEIGHT - 100], [50,Constant.SCREEN_HEIGHT - 100], (255,0,255), 5, True,1,0)
         self.level = 1
 
     def addEdges(self):
-        leftSurface = Surface([0,0],[0,0],[0, self.height],(255,255,255),5,True,1,0)
-        rightSurface = Surface([0, 0],[self.width,0], [self.width,self.height], (255, 255, 255), 5, True, 1,0)
+        leftSurface = Surface([0,0],[0,0],[0, self.height],(255,255,255),0,True,1,0)
+        rightSurface = Surface([0, 0],[self.width,0], [self.width,self.height], (255, 255, 255), 0, True, 1,0)
         topSurface = Surface([0,0], [0,0], [self.width,0], (255,255,255),3,True,1,0)
         bottomSurface = Surface([0, 0], [0, self.height], [self.width, self.height], (255, 255, 255), 3, True, 1, 0)
         self.surfaces.append(leftSurface)
