@@ -11,7 +11,7 @@ class Battlefield():
         self.height = height
         self.surfaces = []
         self.ball = Ball([int(50),int(50)], [float(0.5),float(0.5)], float(self.height/(2e9)), 4, (255,255,255))
-        self.player = Player([float(Constant.SCREEN_WIDTH/1e9),float(Constant.SCREEN_WIDTH/1e9)], [5,Constant.SCREEN_HEIGHT - 100], [50,Constant.SCREEN_HEIGHT - 100], (255,0,255), 5, True,1,0)
+        self.player = Player([float(Constant.SCREEN_WIDTH/1e9),float(Constant.SCREEN_WIDTH/1e9)], [Constant.SCREEN_WIDTH/2,Constant.SCREEN_HEIGHT - 100], [Constant.SCREEN_WIDTH/2 + 50,Constant.SCREEN_HEIGHT - 100], (255,0,255), 5, True,1,0)
         self.level = 1
 
     def addEdges(self):

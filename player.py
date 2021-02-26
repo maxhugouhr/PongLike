@@ -9,17 +9,18 @@ class Player(Surface):
         # magnitude of the velocity in pixels per nanosecond
         self.lowerBound = Constant.SCREEN_HEIGHT - self.width
         self.upperBound = Constant.SCREEN_HEIGHT*3/4
+        self.jhat = [0,0]
 
 
-    def move(self, jhat, time):
+    def move(self, time):
 
-        if jhat[0] > 0.2 or jhat[0] < -0.2:
-            self.leftEndpoint[0] += jhat[0] * self.velocity[0] * time
-            self.rightEndpoint[0] += jhat[0] * self.velocity[0] * time
+        if self.jhat[0] > 0.15 or self.jhat[0] < -0.15:
+            self.leftEndpoint[0] += self.jhat[0] * self.velocity[0] * time
+            self.rightEndpoint[0] += self.jhat[0] * self.velocity[0] * time
 
-        if jhat[1] > 0.2 or jhat[1] < -0.2:
-            self.leftEndpoint[1] += jhat[1] * self.velocity[1] * time
-            self.rightEndpoint[1] += jhat[1] * self.velocity[1] * time
+        if self.jhat[1] > 0.15 or self.jhat[1] < -0.15:
+            self.leftEndpoint[1] += self.jhat[1] * self.velocity[1] * time
+            self.rightEndpoint[1] += self.jhat[1] * self.velocity[1] * time
 
         self.keepBounds()
 

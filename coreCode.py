@@ -34,10 +34,10 @@ while not crashed:
     for surface in battlefield1.surfaces:
         surface.checkHit(battlefield1.ball) #check if the ball has hit any surfaces
         surface.move(currentLoopTime - previousLoopTime) #update the position of all surfaces
-    battlefield1.player.checkHit(battlefield1.ball) #chekc if the ball has hit the player
     battlefield1.ball.updatePosition(currentLoopTime - previousLoopTime) #update the ball position
-    jhat = [joystick.get_axis(0), joystick.get_axis(1)] #get the position of the joystick on the controller
-    battlefield1.player.move(jhat,currentLoopTime - previousLoopTime) #move the player with the joystick
+    battlefield1.player.jhat = [joystick.get_axis(0), joystick.get_axis(1)] #get the position of the joystick on the controller
+    battlefield1.player.move(currentLoopTime - previousLoopTime) #move the player with the joystick
+    battlefield1.player.checkHit(battlefield1.ball)  # chekc if the ball has hit the player
 
 
 
