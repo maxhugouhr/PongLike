@@ -10,10 +10,17 @@ class Player(Surface):
         self.lowerBound = Constant.SCREEN_HEIGHT - self.width
         self.upperBound = Constant.SCREEN_HEIGHT*3/4
         self.jhat = [0,0]
+        pg.joystick.init()
+        if pg.joystick.get_count() != 1:
+            print("joystick error, remove excess controllers or check connectivity")
+            exit()
+
+        self.joystick = pg.joystick.Joystick(0)
+        self.joystick.init()
 
 
     def move(self, time):
-
+        self.jhat = [self.joystick.get_axis(0), self.joystick.get_axis(1)]
         if self.jhat[0] > 0.15 or self.jhat[0] < -0.15:
             self.leftEndpoint[0] += self.jhat[0] * self.velocity[0] * time
             self.rightEndpoint[0] += self.jhat[0] * self.velocity[0] * time

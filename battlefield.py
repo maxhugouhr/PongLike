@@ -24,6 +24,24 @@ class Battlefield():
         self.surfaces.append(topSurface)
         self.surfaces.append(bottomSurface)
 
+    def draw(self,img):
+        for surf in self.surfaces:
+            surf.draw(img)
+        self.player.draw(img)
+        self.enemy.draw(img)
+
+    def moveAll(self,currentLoopTime, previousLoopTime):
+        for surf in self.surfaces:
+            surf.move(currentLoopTime - previousLoopTime)
+        self.player.move(currentLoopTime - previousLoopTime)
+        #self.enemy.move(currentLoopTime - previousLoopTime)
+        self.ball.updatePosition(currentLoopTime - previousLoopTime)
+
+    def checkHitboxes(self):
+        for surf in self.surfaces:
+            surface.checkHit(self.ball)
+        self.player.checkHit(self.ball)
+        self.enemy.checkHit(self.ball)
 
     def initializeLevelOne(self):
         pass
