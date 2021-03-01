@@ -72,11 +72,11 @@ class Surface():
     def checkHit(self,ball):
         if (abs(self.leftEndpoint[0]-self.rightEndpoint[0]) < Constant.TOLERANCE): #if the surface is vertical
             if (ball.position[1] < self.rightEndpoint[1] + ball.radius and ball.position[1] > self.leftEndpoint[1] - ball.radius):
-                if abs(self.leftEndpoint[0] - ball.position[0]) < 1:
+                if abs(self.leftEndpoint[0] - ball.position[0]) < Constant.TOLERANCE:
                     self.impact(ball)
         elif (abs(self.leftEndpoint[1]-self.rightEndpoint[1]) < Constant.TOLERANCE): #if the surface is horizontal
             if (ball.position[0] < self.rightEndpoint[0] + ball.radius and ball.position[0] > self.leftEndpoint[0] - ball.radius):
-                if abs(ball.position[1] - self.leftEndpoint[1]) < 1:
+                if abs(ball.position[1] - self.leftEndpoint[1]) < Constant.TOLERANCE:
                     self.impact(ball)
         else:
             dy = self.rightEndpoint[1] - self.leftEndpoint[1]

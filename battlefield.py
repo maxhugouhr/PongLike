@@ -39,13 +39,14 @@ class Battlefield():
         self.player.move(currentLoopTime - previousLoopTime)
         self.enemy.move(self.ball, currentLoopTime - previousLoopTime)
         self.ball.move(currentLoopTime - previousLoopTime, self.player)
-        self.player.grabBall(self.ball)
+
 
     def checkHitboxes(self):
         for surf in self.surfaces:
             surf.checkHit(self.ball)
         self.player.checkHit(self.ball)
         self.enemy.checkHit(self.ball)
+        self.player.grabBall(self.ball)
 
     def initializeLevelZero(self):
         pass

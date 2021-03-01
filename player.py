@@ -21,8 +21,8 @@ class Player(Surface):
         self.joystick = pg.joystick.Joystick(0)
         self.joystick.init()
         self.randomAngle = False
-        self.lastTriggerTime = time.time_ns()
-        self.grabTime = time.time_ns()
+        self.lastTriggerTime = 0
+        self.grabTime = 0
 
 
     def move(self, time):
@@ -70,11 +70,10 @@ class Player(Surface):
 
     def grabBall(self,ball):
         if ball.isGrabbed:
-            if abs(self.joystick.get_axis(2)) > 0.15 or abs(self.joystick.get_axis(3)) > 0.15:
-                vecNorm = math.sqrt(self.joystick.get_axis(2)**2 + self.joystick.get_axis(3)**2)
-                ball.velocity = [self.joystick.get_axis(2) / vecNorm, self.joystick.get_axis(3) / vecNorm]
-                if time.time_ns() - self.grabTime > 1e9:
-                    ball.isGrabbed = False
+            vecNorm = math.sqrt(self.joystick.get_axis(2)**2 + self.joystick.get_axis(3)**2) + 0.0000000001
+            ball.velocity = [self.joystick.get_axis(2) / vecNorm, self.joystick.get_axis(3) / vecNorm]
+            if not self.joystick.get_button(5):#time.time_ns() - self.grabTime > 1e9:
+                ball.isGrabbed = False
         if abs(self.lastTriggerTime - self.lastHitTime) < 1e9*0.2:
             ball.isGrabbed = True
             self.grabTime = time.time_ns()
