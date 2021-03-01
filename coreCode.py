@@ -24,6 +24,8 @@ while not crashed:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             crashed = True
+        elif event.type == pg.JOYBUTTONDOWN:
+            battlefield1.player.triggerPressed()
 
     battlefield1.moveAll(currentLoopTime,previousLoopTime)
     battlefield1.checkHitboxes()
