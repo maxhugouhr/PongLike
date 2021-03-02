@@ -19,12 +19,12 @@ class Battlefield():
     def addEdges(self):
         leftSurface = Surface([0,0],[0,0],[0, self.height],(255,255,255),0,True,1,0)
         rightSurface = Surface([0, 0],[self.width,0], [self.width,self.height], (255, 255, 255), 0, True, 1,0)
-        topSurface = Surface([0,0], [0,0], [self.width,0], (255,255,255),3,True,1,0)
-        bottomSurface = Surface([0, 0], [0, self.height], [self.width, self.height], (255, 255, 255), 3, True, 1, 0)
+        #topSurface = Surface([0,0], [0,0], [self.width,0], (255,255,255),3,True,1,0)
+        #bottomSurface = Surface([0, 0], [0, self.height], [self.width, self.height], (255, 255, 255), 3, True, 1, 0)
         self.surfaces.append(leftSurface)
         self.surfaces.append(rightSurface)
-        self.surfaces.append(topSurface)
-        self.surfaces.append(bottomSurface)
+        #self.surfaces.append(topSurface)
+        #self.surfaces.append(bottomSurface)
 
     def draw(self,img):
         for surf in self.surfaces:
@@ -47,6 +47,15 @@ class Battlefield():
         self.player.checkHit(self.ball)
         self.enemy.checkHit(self.ball)
         self.player.grabBall(self.ball)
+
+    def checkWinConditions(self):
+        if self.ball.position[1] < -5:
+            self.level += 1
+            return 1
+        if self.ball.position[1] > self.player.leftEndpoint[1] + 5:
+            return -1
+        return 0
+
 
     def initializeLevelZero(self):
         pass
