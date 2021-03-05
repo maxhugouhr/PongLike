@@ -39,8 +39,9 @@ class Surface():
 
 
     def impact(self,ball):
-        if abs(self.lastHitTime - time.time_ns()) > 1e9/100: #ensures the ball can't bounce twice off the same surface in short time frames
+        if ball.lastHitObject != id(self): #ensures the ball can't bounce twice off the same surface
             self.lastHitTime = time.time_ns()
+            ball.lastHitObject = id(self)
             if self.isReflector:
                 self.reflect(ball)
             else:

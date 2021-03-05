@@ -10,14 +10,20 @@ class Ball():
         self.position = position
         self.velocMag = magnitude #magnitude of the velocity in pixels per nanosecond
         self.isGrabbed = False
+        self.lastHitObject = int(-1)
+        self.returnVelocity = self.velocMag
 
     def draw(self,img):
         pg.draw.circle(img, self.color, (self.position[0], self.position[1]), self.radius)
-        pg.draw.line(img, (0,255,0), self.position, [self.position[0]+self.velocMag*self.velocity[0]*0.1e9, self.position[1]+self.velocMag*self.velocity[1]*0.1e9],1)
+        if self.isGrabbed:
+            pg.draw.line(img, (0,255,0), self.position, [self.position[0]+self.velocMag*self.velocity[0]*0.1e9, self.position[1]+self.velocMag*self.velocity[1]*0.1e9],1)
 
     def updatePosition(self,time): #moves the ball according to it's velocity
         self.position[0] += self.velocity[0] * self.velocMag * time
         self.position[1] += self.velocity[1] * self.velocMag * time
+        if self.velocMag > self.returnVelocity or self.velocMag < self.returnVelocity:
+            self.velocMag -= (self.velocMag - self.returnVelocity) * time / 2e9
+
 
 
     def move(self,time, player):

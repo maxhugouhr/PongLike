@@ -58,10 +58,12 @@ class Player(Surface):
         refTransBallVeloc = (math.cos(flatBallAngle), -math.sin(flatBallAngle))
         transOutAngle = math.atan2(refTransBallVeloc[1], refTransBallVeloc[0])
         actualOutAngle = transOutAngle + self.angleToHor
-        actualOutAngle += rand.choice([-1,1]) * (math.pi / 6) * rand.random()
+        actualOutAngle += self.leftJhat[0] * math.pi / 3
         ball.velocity[0] = math.cos(actualOutAngle)
         ball.velocity[1] = math.sin(actualOutAngle)
-        ball.velocMag *= self.speedMultiplier
+        if self.leftJhat[1] < 0.1:
+            ball.velocMag *= -self.leftJhat[1] * self.speedMultiplier
+
 
     def triggerPressed(self):
         if self.joystick.get_button(5): #right trigger on an XBox controller
@@ -81,8 +83,9 @@ class Player(Surface):
     def impact(self,ball):
         if ball.isGrabbed:
             self.lastHitTime = time.time_ns()
-        elif abs(self.lastHitTime - time.time_ns()) > 1e9/100:
+        elif ball.lastHitObject != id(self):
             self.lastHitTime = time.time_ns()
+            ball.lastHitObject = id(self)
             self.reflect(ball)
 
 

@@ -11,20 +11,20 @@ class Battlefield():
         self.width = width
         self.height = height
         self.surfaces = []
-        self.ball = Ball([int(50),int(50)], [float(0.5),float(0.5)], float(self.height/(2e9)), 5, (255,255,255))
-        self.player = Player([float(Constant.SCREEN_WIDTH/1e9),float(Constant.SCREEN_WIDTH/1e9)], [Constant.SCREEN_WIDTH/2,Constant.SCREEN_HEIGHT - 100], [Constant.SCREEN_WIDTH/2 + 75,Constant.SCREEN_HEIGHT - 100], (0,0,255), 5, True,1,0)
+        self.ball = Ball([int(100),int(100)], [float(0.5),float(0.5)], float(self.height/(2e9)), 5, (255,255,255))
+        self.player = Player([float(Constant.SCREEN_WIDTH/1e9),float(Constant.SCREEN_WIDTH/1e9)], [Constant.SCREEN_WIDTH/2,Constant.SCREEN_HEIGHT - 100], [Constant.SCREEN_WIDTH/2 + 75,Constant.SCREEN_HEIGHT - 100], (0,0,255), 5, True,1.5,0)
         self.level = 0
         self.enemy = Enemy([float(Constant.SCREEN_WIDTH/1e9),float(Constant.SCREEN_WIDTH/1e9)], [Constant.SCREEN_WIDTH/2,100], [Constant.SCREEN_WIDTH/2 + 75,100], (255,0,0), 5, True,1,0)
 
     def addEdges(self):
         leftSurface = Surface([0,0],[0,0],[0, self.height],(255,255,255),0,True,1,0)
         rightSurface = Surface([0, 0],[self.width,0], [self.width,self.height], (255, 255, 255), 0, True, 1,0)
-        #topSurface = Surface([0,0], [0,0], [self.width,0], (255,255,255),3,True,1,0)
-        #bottomSurface = Surface([0, 0], [0, self.height], [self.width, self.height], (255, 255, 255), 3, True, 1, 0)
+        topSurface = Surface([0,0], [0,0], [self.width,0], (255,255,255),3,True,1,0)
+        bottomSurface = Surface([0, 0], [0, self.height], [self.width, self.height], (255, 255, 255), 3, True, 1, 0)
         self.surfaces.append(leftSurface)
         self.surfaces.append(rightSurface)
-        #self.surfaces.append(topSurface)
-        #self.surfaces.append(bottomSurface)
+        self.surfaces.append(topSurface)
+        self.surfaces.append(bottomSurface)
 
     def draw(self,img):
         for surf in self.surfaces:
