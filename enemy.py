@@ -5,10 +5,21 @@ import math
 
 class Enemy(Surface):
 
+    returnVelocity = [float(Constant.SCREEN_WIDTH/3e9),float(Constant.SCREEN_WIDTH/3e9)]
+
     def __init__(self, speed, leftEnd, rightEnd , color, width,reflector,speedMultiplier,defAngle):
         super().__init__(speed,leftEnd, rightEnd, color, width, reflector, speedMultiplier, defAngle)
         self.level = 0
         self.randomAngle = False
+        self.velocity = self.returnVelocity
+        self.length = Constant.SCREEN_WIDTH / 5
+        self.rightEndpoint[0] = self.leftEndpoint[0] + self.length
+
+    def reset(self):
+        self.velocity = self.returnVelocity
+        self.speedMultiplier = 1
+        self.leftEndpoint[0] = Constant.SCREEN_WIDTH/2 - self.length/2
+        self.rightEndpoint[0] = self.leftEndpoint[0] + self.length
 
     def move(self,ball,time):
         if self.level == 0 or self.level == 1:

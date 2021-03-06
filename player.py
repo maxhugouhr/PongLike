@@ -7,12 +7,17 @@ import time
 
 class Player(Surface):
 
+    returnVelocity = [float(Constant.SCREEN_WIDTH/1e9),float(Constant.SCREEN_WIDTH/1e9)]
+
     def __init__(self, speed, leftEnd, rightEnd , color, width,reflector,speedMultiplier,defAngle):
         super().__init__(speed,leftEnd, rightEnd, color, width, reflector, speedMultiplier, defAngle)
         # magnitude of the velocity in pixels per nanosecond
         self.lowerBound = Constant.SCREEN_HEIGHT - self.width
         self.upperBound = Constant.SCREEN_HEIGHT*3/4
+        self.length = Constant.SCREEN_WIDTH / 5
+        self.rightEndpoint[0] = self.leftEndpoint[0] + self.length
         self.leftJhat = [0, 0]
+        self.velocity = self.returnVelocity
         pg.joystick.init()
         if pg.joystick.get_count() != 1:
             print("joystick error, remove excess controllers or check connectivity")
@@ -23,6 +28,13 @@ class Player(Surface):
         self.randomAngle = False
         self.lastTriggerTime = 0
         self.grabTime = 0
+
+    def reset(self):
+        self.velocity = self.returnVelocity
+        self.speedMultiplier = 2
+        self.leftEndpoint[0] = Constant.SCREEN_WIDTH/2 - self.length/2
+        self.rightEndpoint[0] = self.leftEndpoint[0] + self.length
+
 
 
     def move(self, time):
@@ -61,8 +73,8 @@ class Player(Surface):
         actualOutAngle += self.leftJhat[0] * math.pi / 3
         ball.velocity[0] = math.cos(actualOutAngle)
         ball.velocity[1] = math.sin(actualOutAngle)
-        if self.leftJhat[1] < 0.1:
-            ball.velocMag *= -self.leftJhat[1] * self.speedMultiplier
+        if self.leftJhat[1] < -0.1:
+            ball.velocMag += -self.leftJhat[1] * self.velocity[1]
 
 
     def triggerPressed(self):

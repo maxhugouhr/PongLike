@@ -3,6 +3,7 @@ from ball import Ball
 from player import Player
 from constants import Constant
 from enemy import Enemy
+from edges import Edge
 
 
 class Battlefield():
@@ -17,6 +18,7 @@ class Battlefield():
         self.enemy = Enemy([float(Constant.SCREEN_WIDTH/1e9),float(Constant.SCREEN_WIDTH/1e9)], [Constant.SCREEN_WIDTH/2,100], [Constant.SCREEN_WIDTH/2 + 75,100], (255,0,0), 5, True,1,0)
 
     def addEdges(self):
+
         leftSurface = Surface([0,0],[0,0],[0, self.height],(255,255,255),0,True,1,0)
         rightSurface = Surface([0, 0],[self.width,0], [self.width,self.height], (255, 255, 255), 0, True, 1,0)
         topSurface = Surface([0,0], [0,0], [self.width,0], (255,255,255),3,True,1,0)
@@ -52,10 +54,28 @@ class Battlefield():
         if self.ball.position[1] < -5:
             self.level += 1
             return 1
-        if self.ball.position[1] > self.player.leftEndpoint[1] + 5:
-            return -1
+        if self.ball.position[1] > self.height + 5:
+            print("you made it to level: ", self.level)
+            exit()
         return 0
+
+    def reset(self):
+        self.surfaces.clear()
+        self.ball.reset()
+        self.player.reset()
+        self.enemy.reset()
+
+    def initializeLevel(self):
+        if self.level == 0:
+            self.initializeLevelZero()
 
 
     def initializeLevelZero(self):
-        pass
+        self.reset()
+        leftEdge = Edge([0,0],[0,0],[0, self.height],(255,255,255),2,True,1,0)
+        rightEdge = Edge([0, 0],[self.width - 2,0], [self.width - 2,self.height], (255, 255, 255), 2, True, 1,0)
+        self.surfaces.append(leftEdge)
+        self.surfaces.append(rightEdge)
+        self.enemy.velocity = [float(Constant.SCREEN_WIDTH / 3e9), float(0)]
+
+

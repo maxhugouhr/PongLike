@@ -13,7 +13,7 @@ clock = pg.time.Clock()
 crashed = False
 
 battlefield1 = Battlefield(Constant.SCREEN_WIDTH, Constant.SCREEN_HEIGHT)
-battlefield1.addEdges()
+battlefield1.initializeLevel()
 
 loopTime = time.time_ns()
 previousLoopTime = loopTime
@@ -38,6 +38,8 @@ while not crashed:
         pg.display.flip() #update the screen
 
     previousLoopTime = currentLoopTime
+    if battlefield1.checkWinConditions() == 1:
+        battlefield1.initializeLevel()
 
 
 pg.joystick.quit()
