@@ -7,8 +7,8 @@ class Enemy(Surface):
 
     returnVelocity = [float(Constant.SCREEN_WIDTH/3e9),float(Constant.SCREEN_WIDTH/3e9)]
 
-    def __init__(self, speed, leftEnd, rightEnd , color, width,reflector,speedMultiplier,defAngle):
-        super().__init__(speed,leftEnd, rightEnd, color, width, reflector, speedMultiplier, defAngle)
+    def __init__(self, speed, leftEnd, rightEnd, color, width, reflector, speedMultiplier, deflectionAngle):
+        super().__init__(speed, leftEnd, rightEnd, color, width, reflector, speedMultiplier, deflectionAngle)
         self.level = 0
         self.randomAngle = False
         self.velocity = self.returnVelocity
@@ -46,11 +46,11 @@ class Enemy(Surface):
     def reflectRandom(self,ball):
         rand.seed()
         ballAngle = float(math.atan2(ball.velocity[1], ball.velocity[0]))  # angle with respect to the x axis
-        flatBallAngle = ballAngle - self.angleToHor
+        flatBallAngle = ballAngle - self.surfaceAngle
         refTransBallVeloc = (math.cos(flatBallAngle), -math.sin(flatBallAngle))
         transOutAngle = math.atan2(refTransBallVeloc[1], refTransBallVeloc[0])
-        actualOutAngle = transOutAngle + self.angleToHor
+        actualOutAngle = transOutAngle + self.surfaceAngle
         actualOutAngle += rand.choice([-1,1]) * (math.pi / 4) * rand.random()
         ball.velocity[0] = math.cos(actualOutAngle)
         ball.velocity[1] = math.sin(actualOutAngle)
-        ball.velocMag *= self.speedMultiplier
+        ball.speed *= self.speedMultiplier

@@ -4,8 +4,8 @@ import time
 
 class Edge(Surface):
 
-    def __init__(self, speed, leftEnd, rightEnd , color, width,reflector,speedMultiplier,defAngle):
-        super().__init__(speed,leftEnd, rightEnd, color, width, reflector, speedMultiplier, defAngle)
+    def __init__(self, speed, leftEnd, rightEnd, color, width, reflector, speedMultiplier, deflectionAngle):
+        super().__init__(speed, leftEnd, rightEnd, color, width, reflector, speedMultiplier, deflectionAngle)
         self.isTeleporter = False
         self.twin = Surface()
 

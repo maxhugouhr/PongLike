@@ -9,8 +9,8 @@ class Player(Surface):
 
     returnVelocity = [float(Constant.SCREEN_WIDTH/1e9),float(Constant.SCREEN_WIDTH/1e9)]
 
-    def __init__(self, speed, leftEnd, rightEnd , color, width,reflector,speedMultiplier,defAngle):
-        super().__init__(speed,leftEnd, rightEnd, color, width, reflector, speedMultiplier, defAngle)
+    def __init__(self, speed, leftEnd, rightEnd, color, width, reflector, speedMultiplier, deflectionAngle):
+        super().__init__(speed, leftEnd, rightEnd, color, width, reflector, speedMultiplier, deflectionAngle)
         # magnitude of the velocity in pixels per nanosecond
         self.lowerBound = Constant.SCREEN_HEIGHT - self.width
         self.upperBound = Constant.SCREEN_HEIGHT*3/4
@@ -66,15 +66,15 @@ class Player(Surface):
     def reflect(self,ball):
         rand.seed(time.time_ns())
         ballAngle = float(math.atan2(ball.velocity[1], ball.velocity[0]))  # angle with respect to the x axis
-        flatBallAngle = ballAngle - self.angleToHor
+        flatBallAngle = ballAngle - self.surfaceAngle
         refTransBallVeloc = (math.cos(flatBallAngle), -math.sin(flatBallAngle))
         transOutAngle = math.atan2(refTransBallVeloc[1], refTransBallVeloc[0])
-        actualOutAngle = transOutAngle + self.angleToHor
+        actualOutAngle = transOutAngle + self.surfaceAngle
         actualOutAngle += self.leftJhat[0] * math.pi / 3
         ball.velocity[0] = math.cos(actualOutAngle)
         ball.velocity[1] = math.sin(actualOutAngle)
         if self.leftJhat[1] < -0.1:
-            ball.velocMag += -self.leftJhat[1] * self.velocity[1]
+            ball.speed += -self.leftJhat[1] * self.velocity[1]
 
 
     def triggerPressed(self):
