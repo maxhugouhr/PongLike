@@ -1,5 +1,5 @@
 import pygame as pg
-from constants import Constant
+from constant import Constant
 
 pg.joystick.init()
 joystick = pg.joystick.Joystick(0)

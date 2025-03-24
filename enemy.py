@@ -1,5 +1,5 @@
-from surface import Surface
-from constants import Constant
+from surfaceToChange import Surface
+from constant import Constant
 import random as rand
 import math
 

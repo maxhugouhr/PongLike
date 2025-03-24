@@ -1,7 +1,7 @@
 import pygame as pg
 from battlefield import Battlefield
 import time
-from constants import Constant
+from constant import Constant
 
 
 

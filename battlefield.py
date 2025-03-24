@@ -1,7 +1,7 @@
-from surface import Surface
+from surfaceToChange import Surface
 from ball import Ball
 from player import Player
-from constants import Constant
+from constant import Constant
 from enemy import Enemy
 from edges import Edge
 

@@ -1,5 +1,5 @@
 import pygame as pg
-from constants import Constant
+from constant import Constant
 from surface import Surface
 import random as rand
 import math
@@ -74,7 +74,7 @@ class Player(Surface):
         ball.velocity[0] = math.cos(actualOutAngle)
         ball.velocity[1] = math.sin(actualOutAngle)
         if self.leftJhat[1] < -0.1:
-            ball.speed += -self.leftJhat[1] * self.velocity[1]
+            ball.speed += -self.leftJhat[1] * self.velocity[1]2
 
 
     def triggerPressed(self):
