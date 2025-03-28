@@ -7,17 +7,29 @@ import time
 
 class Player(Surface):
 
-    returnVelocity = [float(Constant.SCREEN_WIDTH/1e9),float(Constant.SCREEN_WIDTH/1e9)]
 
-    def __init__(self, speed, leftEnd, rightEnd, color, width, reflector, speedMultiplier, deflectionAngle):
-        super().__init__(speed, leftEnd, rightEnd, color, width, reflector, speedMultiplier, deflectionAngle)
+    def __init__(self, speed, leftEnd, rightEnd, color, width):
+        self.leftEndpoint = leftEnd
+        self.rightEndpoint = rightEnd
+        self.color = color
+
+        normalizedRightEnd = (rightEnd[0] - leftEnd[0], rightEnd[1] - leftEnd[1])
+        unitAngle = math.atan2(normalizedRightEnd[1],
+                               normalizedRightEnd[0])  # defines the angle of the surface using normal math angles
+        if unitAngle < math.pi / 2:  # angles above the x-axis (negative x) will be positive angles
+            self.surfaceAngle = unitAngle
+        else:  # angles below the x-axis (positive x) will be nagative angles
+            self.surfaceAngle = -(2 * math.pi - unitAngle)
+
+        self.length = math.sqrt(normalizedRightEnd[0] ** 2 + normalizedRightEnd[1] ** 2)
+        self.width = width
+
         # magnitude of the velocity in pixels per nanosecond
-        self.lowerBound = Constant.SCREEN_HEIGHT - self.width
-        self.upperBound = Constant.SCREEN_HEIGHT*3/4
-        self.length = Constant.SCREEN_WIDTH / 5
-        self.rightEndpoint[0] = self.leftEndpoint[0] + self.length
-        self.leftJhat = [0, 0]
-        self.velocity = self.returnVelocity
+        self.lowerMovementBoundary = Constant.SCREEN_HEIGHT - self.width
+        self.upperMovementBoundary = Constant.SCREEN_HEIGHT * 3 / 4
+        self.stickPosition = [0, 0]
+        self.speed = speed
+
         pg.joystick.init()
         if pg.joystick.get_count() != 1:
             print("joystick error, remove excess controllers or check connectivity")
@@ -25,27 +37,30 @@ class Player(Surface):
 
         self.joystick = pg.joystick.Joystick(0)
         self.joystick.init()
-        self.randomAngle = False
-        self.lastTriggerTime = 0
-        self.grabTime = 0
 
-    def reset(self):
-        self.velocity = self.returnVelocity
-        self.speedMultiplier = 2
-        self.leftEndpoint[0] = Constant.SCREEN_WIDTH/2 - self.length/2
-        self.rightEndpoint[0] = self.leftEndpoint[0] + self.length
+        self.lastTriggerTime = None
+        self.grabTime = None
+
+
+    def normalizeJoystickPosition(self, stickPosition):
+        if Constant.STICK_TOLERANCE > stickPosition[0] > -Constant.STICK_TOLERANCE:
+            return [0,0]
+        if Constant.STICK_TOLERANCE > stickPosition[1] > -Constant.STICK_TOLERANCE:
+            return [0,0]
+        stickPositionMagnitude = math.sqrt(self.stickPosition[0] ** 2 + self.stickPosition[1] ** 2)
+        return [x / stickPositionMagnitude for x in stickPosition]
 
 
 
     def move(self, time):
-        self.leftJhat = [self.joystick.get_axis(0), self.joystick.get_axis(1)]
-        if self.leftJhat[0] > 0.15 or self.leftJhat[0] < -0.15:
-            self.leftEndpoint[0] += self.leftJhat[0] * self.velocity[0] * time
-            self.rightEndpoint[0] += self.leftJhat[0] * self.velocity[0] * time
+        self.stickPosition = [self.joystick.get_axis(0), self.joystick.get_axis(1)]
+        normalizedStickPosition = self.normalizeJoystickPosition(self.stickPosition)
 
-        if self.leftJhat[1] > 0.15 or self.leftJhat[1] < -0.15:
-            self.leftEndpoint[1] += self.leftJhat[1] * self.velocity[1] * time
-            self.rightEndpoint[1] += self.leftJhat[1] * self.velocity[1] * time
+        self.leftEndpoint[0] += normalizedStickPosition[0] * self.speed * time
+        self.rightEndpoint[0] += normalizedStickPosition[0] * self.speed * time
+
+        self.leftEndpoint[1] += normalizedStickPosition[1] * self.speed * time
+        self.rightEndpoint[1] += normalizedStickPosition[1] * self.speed * time
 
         self.keepBounds()
 
@@ -57,10 +72,10 @@ class Player(Surface):
         if self.rightEndpoint[0] > Constant.SCREEN_WIDTH:
             self.rightEndpoint[0] = Constant.SCREEN_WIDTH
             self.leftEndpoint[0] = Constant.SCREEN_WIDTH - self.length
-        if self.leftEndpoint[1] > self.lowerBound:
-            self.leftEndpoint[1], self.rightEndpoint[1] = self.lowerBound, self.lowerBound
-        if self.leftEndpoint[1] < self.upperBound:
-            self.leftEndpoint[1], self.rightEndpoint[1] = self.upperBound, self.upperBound
+        if self.leftEndpoint[1] > self.lowerMovementBoundary:
+            self.leftEndpoint[1], self.rightEndpoint[1] = self.lowerMovementBoundary, self.lowerMovementBoundary
+        if self.leftEndpoint[1] < self.upperMovementBoundary:
+            self.leftEndpoint[1], self.rightEndpoint[1] = self.upperMovementBoundary, self.upperMovementBoundary
 
 
     def reflect(self,ball):
@@ -70,12 +85,11 @@ class Player(Surface):
         refTransBallVeloc = (math.cos(flatBallAngle), -math.sin(flatBallAngle))
         transOutAngle = math.atan2(refTransBallVeloc[1], refTransBallVeloc[0])
         actualOutAngle = transOutAngle + self.surfaceAngle
-        actualOutAngle += self.leftJhat[0] * math.pi / 3
+        actualOutAngle += self.stickPosition[0] * math.pi / 3
         ball.velocity[0] = math.cos(actualOutAngle)
         ball.velocity[1] = math.sin(actualOutAngle)
-        if self.leftJhat[1] < -0.1:
-            ball.speed += -self.leftJhat[1] * self.velocity[1]2
-
+        if self.stickPosition[1] < -0.1:
+            ball.speed += -self.stickPosition[1] * self.speed
 
     def triggerPressed(self):
         if self.joystick.get_button(5): #right trigger on an XBox controller
