@@ -10,8 +10,7 @@ class Reflector(Surface):
 
     def __init__(self, leftEnd, rightEnd, color, width, velocity=[0,0], speedMultiplier=1):
 
-        if velocity is None:
-            velocity = [0, 0]
+
         self.leftEndpoint = np.array(leftEnd)
         self.rightEndpoint = np.array(rightEnd)
         self.color = color
@@ -63,11 +62,11 @@ class Reflector(Surface):
     def reflect(self,ball):
         # transforms all surfaces to a horizontal surface, reflects by reversing y-velocity,
         # then find the out angle and transforms back to normal coordinates
-        ballAngle = float(math.atan2(ball.velocity[1], ball.velocity[0]))  # angle with respect to the x axis
+        ballAngle = float(math.atan2(ball.unitVelocity[1], ball.unitVelocity[0]))  # angle with respect to the x axis
         flatBallAngle = ballAngle - self.surfaceAngle
         refTransBallVeloc = (math.cos(flatBallAngle), -math.sin(flatBallAngle))
         transOutAngle = math.atan2(refTransBallVeloc[1], refTransBallVeloc[0])
         actualOutAngle = transOutAngle + self.surfaceAngle
-        ball.velocity[0] = math.cos(actualOutAngle)
-        ball.velocity[1] = math.sin(actualOutAngle)
+        ball.unitVelocity[0] = math.cos(actualOutAngle)
+        ball.unitVelocity[1] = math.sin(actualOutAngle)
         ball.speed *= self.speedMultiplier

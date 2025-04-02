@@ -6,7 +6,7 @@ from constant import Constant
 
 class Ball():
 
-    returnVelocity = float(Constant.SCREEN_HEIGHT / 2e9)
+    returnSpeed = float(Constant.SCREEN_HEIGHT / 2e9)
 
     def __init__(self,position, velocity, speed, radius=1, color=(255,255,255)):
         self.radius = radius
@@ -17,6 +17,8 @@ class Ball():
         self.isGrabbed = False
         self.lastHitObject = int(-1)
         self.lastHitTime = None
+        self.returnSpeed = speed
+
 
 
     def draw(self, image):
@@ -27,12 +29,12 @@ class Ball():
     def updatePosition(self,time): #moves the ball according to it's velocity
         self.position[0] += self.unitVelocity[0] * self.speed * time
         self.position[1] += self.unitVelocity[1] * self.speed * time
-        if self.speed > self.returnVelocity or self.speed < self.returnVelocity:
-            self.speed -= (self.speed - self.returnVelocity) * time / 2e9
+        if self.speed > self.returnSpeed or self.speed < self.returnSpeed:
+            self.speed -= (self.speed - self.returnSpeed) * time / 2e9
 
     def reset(self):
         self.position = [Constant.SCREEN_WIDTH / 2, Constant.SCREEN_HEIGHT / 2]
-        self.speed = self.returnVelocity
+        self.speed = self.returnSpeed
         self.unitVelocity = [0, 1]
 
     def move(self,time, player):

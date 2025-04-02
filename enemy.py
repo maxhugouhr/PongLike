@@ -6,7 +6,7 @@ import numpy as np
 import functions
 
 
-class Enemy(Surface):
+class Enemy():
 
     def __init__(self, speed, leftEnd, length, color, width, ball, speedMultiplier=1):
 

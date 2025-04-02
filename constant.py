@@ -2,6 +2,6 @@ class Constant():
 
     SCREEN_HEIGHT = 750
     SCREEN_WIDTH = 500
-    FRAME_RATE = 60
+    FRAME_RATE = 30
     TOLERANCE = 4
     STICK_TOLERANCE = 0.15

@@ -13,6 +13,7 @@ class Player(Surface):
         self.leftEndpoint = np.array(leftEnd)
         self.rightEndpoint = np.array(rightEnd)
         self.color = color
+        self.lastHitTime = time.time_ns()
 
         normalizedRightEnd = (rightEnd[0] - leftEnd[0], rightEnd[1] - leftEnd[1])
         unitAngle = math.atan2(normalizedRightEnd[1],
@@ -39,7 +40,7 @@ class Player(Surface):
         self.joystick = pg.joystick.Joystick(0)
         self.joystick.init()
 
-        self.lastTriggerTime = None
+        self.lastTriggerTime = time.time_ns()
         self.grabTime = None
 
 
@@ -65,6 +66,9 @@ class Player(Surface):
 
         self.keepBounds()
 
+    def draw(self,img):
+        pg.draw.line(img,self.color,self.leftEndpoint, self.rightEndpoint, self.width)
+
 
     def keepBounds(self):
         if self.leftEndpoint[0] < 0:
@@ -81,14 +85,14 @@ class Player(Surface):
 
     def reflect(self,ball):
         rand.seed(time.time_ns())
-        ballAngle = float(math.atan2(ball.velocity[1], ball.velocity[0]))  # angle with respect to the x axis
+        ballAngle = float(math.atan2(ball.unitVelocity[1], ball.unitVelocity[0]))  # angle with respect to the x axis
         flatBallAngle = ballAngle - self.surfaceAngle
         refTransBallVeloc = (math.cos(flatBallAngle), -math.sin(flatBallAngle))
         transOutAngle = math.atan2(refTransBallVeloc[1], refTransBallVeloc[0])
         actualOutAngle = transOutAngle + self.surfaceAngle
         actualOutAngle += self.stickPosition[0] * math.pi / 3
-        ball.velocity[0] = math.cos(actualOutAngle)
-        ball.velocity[1] = math.sin(actualOutAngle)
+        ball.unitVelocity[0] = math.cos(actualOutAngle)
+        ball.unitVelocity[1] = math.sin(actualOutAngle)
         if self.stickPosition[1] < -0.1:
             ball.speed += -self.stickPosition[1] * self.speed
 
@@ -114,5 +118,24 @@ class Player(Surface):
             self.lastHitTime = time.time_ns()
             ball.lastHitObject = id(self)
             self.reflect(ball)
+
+
+    def checkHit(self,ball):
+        pixelTolerance = 4
+        dy = self.rightEndpoint[1] - self.leftEndpoint[1]
+        dx = self.rightEndpoint[0] - self.leftEndpoint[0]
+        if (abs(dx) < pixelTolerance): #if the surface is vertical
+            if (ball.position[1] < self.rightEndpoint[1] + ball.radius and ball.position[1] > self.leftEndpoint[1] - ball.radius):
+                if abs(self.leftEndpoint[0] - ball.position[0]) < pixelTolerance:
+                    self.impact(ball)
+        elif (abs(dy) < pixelTolerance): #if the surface is horizontal
+            if (ball.position[0] < self.rightEndpoint[0] + ball.radius and ball.position[0] > self.leftEndpoint[0] - ball.radius):
+                if abs(ball.position[1] - self.leftEndpoint[1]) < pixelTolerance:
+                    self.impact(ball)
+        else:
+            y = lambda x: (dy/dx)*(x - self.leftEndpoint[0]) + self.leftEndpoint[1] #gives the y value of the surface for a given x value
+            surfYValue = y(ball.position[0])
+            if abs(surfYValue - ball.position[1]) < pixelTolerance:
+                self.impact(ball)
 
 
