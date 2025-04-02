@@ -1,15 +1,19 @@
 import time
-import surface
+from surface import Surface
+import numpy as np
 import math
 import pygame as pg
-import constant
+from constant import Constant
+import functions
 
 class Reflector(Surface):
 
-    def __init__(self, leftEnd,rightEnd,color,width,velocity=[0,0],speedMultiplier=1):
+    def __init__(self, leftEnd, rightEnd, color, width, velocity=[0,0], speedMultiplier=1):
 
-        self.leftEndpoint = leftEnd
-        self.rightEndpoint = rightEnd
+        if velocity is None:
+            velocity = [0, 0]
+        self.leftEndpoint = np.array(leftEnd)
+        self.rightEndpoint = np.array(rightEnd)
         self.color = color
 
         normalizedRightEnd = (rightEnd[0] - leftEnd[0], rightEnd[1] - leftEnd[1])
@@ -21,17 +25,16 @@ class Reflector(Surface):
 
         self.length = math.sqrt(normalizedRightEnd[0]**2 + normalizedRightEnd[1]**2)
         self.width = width
-        self.velocity = velocity
+        self.velocity = np.array(velocity)
         self.speedMultiplier = speedMultiplier
 
     def draw(self,img):
         pg.draw.line(img,self.color,self.leftEndpoint, self.rightEndpoint, self.width)
 
     def move(self,time): #updates the position of a moving surface
-        self.leftEndpoint[0] += self.velocity[0] * time
-        self.rightEndpoint[0] += self.velocity[0] * time
-        self.leftEndpoint[1] += self.velocity[1] * time
-        self.rightEndpoint[1] += self.velocity[1] * time
+        self.leftEndpoint += self.velocity * time
+        self.rightEndpoint += self.velocity * time
+
 
     def checkHit(self,ball):
         pixelTolerance = 4

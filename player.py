@@ -1,4 +1,5 @@
 import pygame as pg
+import numpy as np
 from constant import Constant
 from surface import Surface
 import random as rand
@@ -9,8 +10,8 @@ class Player(Surface):
 
 
     def __init__(self, speed, leftEnd, rightEnd, color, width):
-        self.leftEndpoint = leftEnd
-        self.rightEndpoint = rightEnd
+        self.leftEndpoint = np.array(leftEnd)
+        self.rightEndpoint = np.array(rightEnd)
         self.color = color
 
         normalizedRightEnd = (rightEnd[0] - leftEnd[0], rightEnd[1] - leftEnd[1])

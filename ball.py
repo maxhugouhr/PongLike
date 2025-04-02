@@ -1,4 +1,5 @@
 import pygame as pg
+import numpy as np
 from constant import Constant
 
 
@@ -10,9 +11,9 @@ class Ball():
     def __init__(self,position, velocity, speed, radius=1, color=(255,255,255)):
         self.radius = radius
         self.color = color
-        self.unitVelocity = velocity #unit direction the ball is traveling
-        self.position = position
-        self.speed = speed #speed of the velocity in pixels per nanosecond
+        self.unitVelocity = np.array(velocity) #unit direction the ball is traveling
+        self.position = np.array(position)
+        self.speed = speed #scalar
         self.isGrabbed = False
         self.lastHitObject = int(-1)
         self.lastHitTime = None
