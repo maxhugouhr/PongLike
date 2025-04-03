@@ -5,3 +5,4 @@ class Constant():
     FRAME_RATE = 30
     TOLERANCE = 4
     STICK_TOLERANCE = 0.15
+    SLEEP_TOLERANCE = 0.002
