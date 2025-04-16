@@ -1,12 +1,13 @@
 import time
-from surface import Surface
+from graphicalEntity import GraphicalEntity
+from physicalEntity import PhysicalEntity
 import numpy as np
 import math
 import pygame as pg
 from constant import Constant
 import functions
 
-class Reflector(Surface):
+class Reflector(PhysicalEntity, GraphicalEntity):
 
     def __init__(self, leftEnd, rightEnd, color, width, velocity=[0,0], speedMultiplier=1):
 
@@ -27,8 +28,8 @@ class Reflector(Surface):
         self.velocity = np.array(velocity)
         self.speedMultiplier = speedMultiplier
 
-    def draw(self,img):
-        pg.draw.line(img,self.color,self.leftEndpoint, self.rightEndpoint, self.width)
+    def draw(self,img, otherEntity):
+        pg.draw.line(img,self.color,tuple(self.leftEndpoint), tuple(self.rightEndpoint), self.width)
 
     def move(self,time): #updates the position of a moving surface
         self.leftEndpoint += self.velocity * time

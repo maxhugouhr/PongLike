@@ -1,12 +1,13 @@
 import pygame as pg
 import numpy as np
 from constant import Constant
-from surface import Surface
+from graphicalEntity import GraphicalEntity
+from physicalEntity import PhysicalEntity
 import random as rand
 import math
 import time
 
-class Player(Surface):
+class Player(GraphicalEntity, PhysicalEntity):
 
 
     def __init__(self, speed, leftEnd, rightEnd, color, width):
@@ -66,7 +67,7 @@ class Player(Surface):
 
         self.keepBounds()
 
-    def draw(self,img):
+    def draw(self,img, otherEntity):
         pg.draw.line(img,self.color,self.leftEndpoint, self.rightEndpoint, self.width)
 
 

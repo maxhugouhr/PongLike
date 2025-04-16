@@ -1,4 +1,5 @@
-from surface import Surface
+from graphicalEntity import GraphicalEntity
+from physicalEntity import PhysicalEntity
 from constant import Constant
 import random as rand
 import math
@@ -6,7 +7,7 @@ import numpy as np
 import functions
 
 
-class Enemy():
+class Enemy(GraphicalEntity, PhysicalEntity):
 
     def __init__(self, speed, leftEnd, length, color, width, ball, speedMultiplier=1):
 

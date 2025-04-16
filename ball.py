@@ -1,10 +1,12 @@
 import pygame as pg
 import numpy as np
 from constant import Constant
+from graphicalEntity import GraphicalEntity
+from physicalEntity import PhysicalEntity
 
 
 
-class Ball():
+class Ball(PhysicalEntity, GraphicalEntity):
 
     returnSpeed = float(Constant.SCREEN_HEIGHT / 2e9)
 
