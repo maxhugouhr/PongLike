@@ -67,7 +67,7 @@ class Player(GraphicalEntity, PhysicalEntity):
 
         self.keepBounds()
 
-    def draw(self,img, otherEntity):
+    def draw(self,img):
         pg.draw.line(img,self.color,self.leftEndpoint, self.rightEndpoint, self.width)
 
 

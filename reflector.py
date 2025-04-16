@@ -28,7 +28,7 @@ class Reflector(PhysicalEntity, GraphicalEntity):
         self.velocity = np.array(velocity)
         self.speedMultiplier = speedMultiplier
 
-    def draw(self,img, otherEntity):
+    def draw(self,img):
         pg.draw.line(img,self.color,tuple(self.leftEndpoint), tuple(self.rightEndpoint), self.width)
 
     def move(self,time): #updates the position of a moving surface
