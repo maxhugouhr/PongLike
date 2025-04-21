@@ -1,5 +1,4 @@
 import pygame as pg
-from battlefield import Battlefield
 import time
 from constant import Constant
 
@@ -15,11 +14,11 @@ crashed = False
 battlefield1 = Battlefield(Constant.SCREEN_WIDTH, Constant.SCREEN_HEIGHT)
 battlefield1.initializeLevel()
 
-loopTime = time.time_ns()
+loopTime = time.perf_counter()
 previousLoopTime = loopTime
 
 while not crashed:
-    currentLoopTime = time.time_ns() #main loop runs on time to keep frames and movement time dependent
+    currentLoopTime = time.perf_counter() #main loop runs on time to keep frames and movement time dependent
     gameDisplay1.fill((0,0,0)) #black background
     for event in pg.event.get():
         if event.type == pg.QUIT:
@@ -32,8 +31,8 @@ while not crashed:
 
 
 
-    if time.time_ns() - loopTime > 1e9 / Constant.FRAME_RATE: #draws a new frame 30 times a second
-        loopTime = time.time_ns()
+    if time.perf_counter() - loopTime > 1e9 / Constant.FRAME_RATE: #draws a new frame 30 times a second
+        loopTime = time.perf_counter()
         battlefield1.draw(gameDisplay1)
         pg.display.flip() #update the screen
 

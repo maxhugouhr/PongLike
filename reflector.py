@@ -56,7 +56,7 @@ class Reflector(PhysicalEntity, GraphicalEntity):
 
     def impact(self,ball):
         if ball.lastHitObject != id(self):
-            ball.lastHitTime = time.time_ns()
+            ball.lastHitTime = time.perf_counter()
             ball.lastHitObject = id(self)
             self.reflect(ball)
 

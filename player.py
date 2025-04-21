@@ -14,7 +14,7 @@ class Player(GraphicalEntity, PhysicalEntity):
         self.leftEndpoint = np.array(leftEnd)
         self.rightEndpoint = np.array(rightEnd)
         self.color = color
-        self.lastHitTime = time.time_ns()
+        self.lastHitTime = time.perf_counter()
 
         normalizedRightEnd = (rightEnd[0] - leftEnd[0], rightEnd[1] - leftEnd[1])
         unitAngle = math.atan2(normalizedRightEnd[1],
@@ -41,7 +41,7 @@ class Player(GraphicalEntity, PhysicalEntity):
         self.joystick = pg.joystick.Joystick(0)
         self.joystick.init()
 
-        self.lastTriggerTime = time.time_ns()
+        self.lastTriggerTime = time.perf_counter()
         self.grabTime = None
 
 
@@ -85,7 +85,7 @@ class Player(GraphicalEntity, PhysicalEntity):
 
 
     def reflect(self,ball):
-        rand.seed(time.time_ns())
+        rand.seed(time.perf_counter())
         ballAngle = float(math.atan2(ball.unitVelocity[1], ball.unitVelocity[0]))  # angle with respect to the x axis
         flatBallAngle = ballAngle - self.surfaceAngle
         refTransBallVeloc = (math.cos(flatBallAngle), -math.sin(flatBallAngle))
@@ -99,7 +99,7 @@ class Player(GraphicalEntity, PhysicalEntity):
 
     def triggerPressed(self):
         if self.joystick.get_button(5): #right trigger on an XBox controller
-            self.lastTriggerTime = time.time_ns()
+            self.lastTriggerTime = time.perf_counter()
 
 
     def grabBall(self,ball):
@@ -110,13 +110,13 @@ class Player(GraphicalEntity, PhysicalEntity):
                 ball.isGrabbed = False
         if abs(self.lastTriggerTime - self.lastHitTime) < 1e9*0.2:
             ball.isGrabbed = True
-            self.grabTime = time.time_ns()
+            self.grabTime = time.perf_counter()
 
     def impact(self,ball):
         if ball.isGrabbed:
-            self.lastHitTime = time.time_ns()
+            self.lastHitTime = time.perf_counter()
         elif ball.lastHitObject != id(self):
-            self.lastHitTime = time.time_ns()
+            self.lastHitTime = time.perf_counter()
             ball.lastHitObject = id(self)
             self.reflect(ball)
 

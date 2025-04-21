@@ -7,9 +7,9 @@ class PhysicalEntity(ABC):
         pass
 
     @abstractmethod
-    def checkHit(self,otherSurface):
+    def checkHit(self,ball):
         pass
 
     @abstractmethod
-    def impact(self,otherSurface):
+    def impact(self,ball):
         pass

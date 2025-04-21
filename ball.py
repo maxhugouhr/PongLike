@@ -6,7 +6,7 @@ from physicalEntity import PhysicalEntity
 
 
 
-class Ball(PhysicalEntity, GraphicalEntity):
+class Ball(GraphicalEntity):
 
     returnSpeed = float(Constant.SCREEN_HEIGHT / 2e9)
 
@@ -24,7 +24,7 @@ class Ball(PhysicalEntity, GraphicalEntity):
 
 
     def draw(self, image):
-        pg.draw.circle(image, self.color, (self.position[0], self.position[1]), self.radius)
+        pg.draw.circle(image, self.color, [float(self.position[0]), float(self.position[1])], self.radius)
         if self.isGrabbed:
             pg.draw.line(image, (0, 255, 0), self.position, [self.position[0] + self.speed * self.unitVelocity[0] * 0.1e9, self.position[1] + self.speed * self.unitVelocity[1] * 0.1e9], 1)
 
