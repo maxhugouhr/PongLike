@@ -6,3 +6,4 @@ class Constant():
     TOLERANCE = 4
     STICK_TOLERANCE = 0.15
     SLEEP_TOLERANCE = 0.002
+    TRIGGER_TOLERANCE = 1e9*0.2

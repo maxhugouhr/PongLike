@@ -14,6 +14,6 @@ class PhysicsEngine():
         for entity in self.physicsEntitiesList:
             entity.checkHit(self.ball)
 
-    def callEngine(self,timeStep):
+    def __call__(self,timeStep):
         self.move(timeStep)
         self.checkHit()

@@ -108,7 +108,7 @@ class Player(GraphicalEntity, PhysicalEntity):
             ball.velocity = [self.joystick.get_axis(2) / vecNorm, self.joystick.get_axis(3) / vecNorm]
             if not self.joystick.get_button(5):#time.time_ns() - self.grabTime > 1e9:
                 ball.isGrabbed = False
-        if abs(self.lastTriggerTime - self.lastHitTime) < 1e9*0.2:
+        if abs(self.lastTriggerTime - self.lastHitTime) < Constant.TRIGGER_TOLERANCE:
             ball.isGrabbed = True
             self.grabTime = time.perf_counter()
 
